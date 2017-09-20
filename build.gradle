@@ -46,17 +46,39 @@ dependencies {
 //---------- git interactions ------------
 
 ext {
+    ERROR_MODIFIED_FILES = "ERROR: Unable to publish with un-committed files"
+    ERROR_NO_TAG = "ERROR: Unable to publish without a release tag"
+
     tagname = {
         def buffer = new ByteArrayOutputStream()
 
-        def result = exec {
-            commandLine 'git', 'describe', '--tags'
-            standardOutput = buffer
+        def modified = exec {
+            commandLine 'git', 'diff-index', '--quiet', 'HEAD', '--'
+            ignoreExitValue = true
         }
 
-        if (result.exitValue != 0)
-            throw new GradleException("Unable to find release tag")
+        def result = exec {
+            commandLine 'git', 'describe', '--tags', '--exact-match'
+            standardOutput = buffer
+            errorOutput = new ByteArrayOutputStream()
+            ignoreExitValue = true
+        }
 
-        return buffer.toString().trim()
+        if (modified.exitValue != 0) ERROR_MODIFIED_FILES
+        else if (result.exitValue != 0) ERROR_NO_TAG
+        else buffer.toString().trim()
     }
+}
+
+task verifyReleaseVersion() {
+    doLast {
+        def publishVersion = publishing.publications.maven.version
+
+        if (publishVersion == ERROR_MODIFIED_FILES || publishVersion == ERROR_NO_TAG)
+            throw new GradleException(publishVersion)
+    }
+}
+
+tasks.withType(PublishToMavenRepository) {
+    it.dependsOn verifyReleaseVersion
 }
