@@ -1,0 +1,43 @@
+group 'com.doapps'
+version "1.0"
+
+apply plugin: 'java'
+apply plugin: 'maven-publish'
+
+sourceCompatibility = 1.6
+
+repositories {
+    jcenter()
+}
+
+task sourceJar(type: Jar, dependsOn: classes) {
+    from sourceSets.main.allSource
+}
+
+publishing {
+    publications {
+        maven(MavenPublication) {
+            artifactId 'time'
+            from components.java
+
+            artifact sourceJar { classifier "sources" }
+        }
+    }
+
+    repositories {
+        maven {
+            url doappRepositoryUser
+            credentials {
+                username doappRepositoryUser
+                password doappRepositoryPassword
+                }
+        }
+    }
+}
+
+dependencies {
+    compile 'joda-time:joda-time:2.3'
+    
+    testCompile 'junit:junit:4.11'
+    testCompile 'org.hamcrest:hamcrest-integration:1.3'
+}
