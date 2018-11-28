@@ -5,7 +5,7 @@ plugins {
     id("ncm.gradle.version") version "5.1"
     id("ncm.gradle.publish") version "5.1"
 
-//    id("jmfayard.github.io.gradle-kotlin-dsl-libs") version "0.2.6"
+    id("jmfayard.github.io.gradle-kotlin-dsl-libs") version "0.2.6"
 }
 
 group = "com.doapps"
@@ -17,10 +17,10 @@ java {
 }
 
 dependencies {
-    api("joda-time:joda-time:2.3")
+    api(Libs.joda_time)
 
-    testImplementation("junit:junit:4.11")
-    testImplementation("org.hamcrest:hamcrest-integration:1.3")
+    testImplementation(Libs.junit)
+    testImplementation(Libs.hamcrest_integration)
 }
 
 
