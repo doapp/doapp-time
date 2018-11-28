@@ -1,3 +1,30 @@
+plugins {
+    `java-library`
+
+    id("ncm.gradle.repos") version "5.1"
+    id("ncm.gradle.version") version "5.1"
+    id("ncm.gradle.publish") version "5.1"
+
+//    id("jmfayard.github.io.gradle-kotlin-dsl-libs") version "0.2.6"
+}
+
+group = "com.doapps"
+version = "DEV-SNAPSHOT"
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_1_7
+    targetCompatibility = JavaVersion.VERSION_1_7
+}
+
+dependencies {
+    api("joda-time:joda-time:2.3")
+
+    testImplementation("junit:junit:4.11")
+    testImplementation("org.hamcrest:hamcrest-integration:1.3")
+}
+
+
+/*
 group 'com.doapps'
 version "DEV-SNAPSHOT"
 
@@ -82,3 +109,4 @@ task verifyReleaseVersion() {
 tasks.withType(PublishToMavenRepository) {
     it.dependsOn verifyReleaseVersion
 }
+*/
