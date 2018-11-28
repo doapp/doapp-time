@@ -12,3 +12,4 @@ buildNumber.properties
 .*.sw*
 build/
 .gradle/
+out/
